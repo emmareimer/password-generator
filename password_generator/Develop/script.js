@@ -2,125 +2,123 @@
 
 // Assign variables to the global scope
 var generateBtn = document.querySelector("#generate");
-var lowercaseOptions = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"]
-var uppercaseOptions = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"]
-var numberOptions = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-var symbolOptions = ["!", "@"]
+var options = {
+  lowercase: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"],
+  uppercase: ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"],
+  number: ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"],
+  symbol: ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "<", ">", "?", "{", "}", "[", "]"]
+};
 
 
 // Write password to the #password input
 function writePassword() {
+  // generatePassword will return thePassword
   var password = generatePassword();
   var passwordText = document.querySelector("#password");
-
-
+  console.log (password)
+  
   passwordText.value = password;
-
-}
-
-// GIVEN I need a new, secure password
-// WHEN I click the button to generate a password
-// THEN I am presented with a series of prompts for password criteria
-// WHEN prompted for password criteria
-// THEN I select which criteria to include in the password
-// WHEN prompted for the length of the password
-// THEN I choose a length of at least 8 characters and no more than 128 characters
-// WHEN asked for character types to include in the password
-// THEN I confirm whether or not to include lowercase, uppercase, numeric, and/or special characters
-
-// WHEN I answer each prompt
-// THEN my input should be validated and at least one character type should be selected
-// WHEN all prompts are answered
-// THEN a password is generated that matches the selected criteria
-// WHEN the password is generated
-// THEN the password is either displayed in an alert or written to the page
+  }
 
 function generatePassword() {
     // user inputs length of password
-    var length = prompt ("Length of password? Between 8-128 digits.")
+    var passwordLength = prompt ("Length of password? Between 8-128 digits.")
   
     // or user cancels
-    if (length === null) { 
+    if (passwordLength === null) { 
       // function ends
       return; 
     }
 
-    // if length is too short or too long
-    else if (length < 8 || length > 128) {
+    // if passwordLength is too short or too long
+    else if (passwordLength < 8 || passwordLength > 128) {
       // confirm error message
       var lengthInvalid = confirm ("You have chosen a password that is too short or too long. \nPlease try again.")
-      generatePassword();
     }
-
-    // // back to the beginning
-    // else if (lengthInvalid === true) {
-    // generatePassword (); 
-    // }
     
-    // // or if user selects cancel
-    // else if (lengthInvalid === false) {
-    // // end function
-    // // return; 
-    // } 
-
-    //user confirms length of password
-    var confirmLength = confirm ("You have chosen to have a password that is " + length + " digits long. \nPress 'Ok' to continue.")    
-
-    // if users chooses no
-    if (confirmLength === false) {
-      // back to the beginning
+    if (lengthInvalid === true) {
       generatePassword();
     }
+
+    // or if user selects cancel
+    else if (lengthInvalid === false) {
+      // end function
+      return; 
+    } 
+
+    var enabledOptions = []
 
     //user chooses to include lowercase letters
     var lowercase = confirm ("Would you like to include lowercase letters? Choose 'Ok' for yes or 'Cancel' for no.")
-    // user confirms choice of lowercase letters
-    var confirmLowercase = confirm ("You have chosen to include lowercase letters: " + lowercase + ". \nPress 'Ok' to continue.")
-    // if users chooses cancel, end the function !! NOT WORKING !!
-    if (confirmLowercase === false) {
-      generatePassword();
+    if (lowercase) {
+      enabledOptions.push("lowercase");
     }
 
     // user chooses to include uppercase letters
     var uppercase = confirm ("Would you like to include uppercase letters? Choose 'Ok' for yes or 'Cancel' for no.")
-    //user confirms choice to include uppercase letters
-    var confirmUppercase = confirm ("You have chosen to include uppercase letters: " + uppercase + ". \n Press 'Ok' to continue.")
-    // if user chooses cancel, end the function
-    if (confirmUppercase === false) {
-      generatePassword();
+    if (uppercase) {
+      enabledOptions.push("uppercase");
     }
-    
+
     // user chooses to include numbers
     var number = confirm ("Would you like to include numbers? Choose 'Ok' for yes or 'Cancel' for no.")
-    // user confirms choice to include numbers
-    var confirmNumber = confirm ("You have chosen to include numbers: " + number + ". \n Press 'Ok' to continue.")
-    // if user choose to cancel, back to the beginning
-    if (confirmNumber === false) {
-      generatePassword();
+    if (number) {
+      enabledOptions.push("number");
     }
-  
+
     //user chooses to include special characters
-    var symbol = confirm ("Would you like to include special charcaters? Choose 'Ok' for yes or 'Cancel' for no.")
-    //user confirms choice of symbols
-    var confirmSymbol = confirm ("You have chosen to include symbols: " + symbol + ". \n Press 'Ok' to continue.")
-    //if user chooses to cancel, back to the beginning
-    if (confirmSymbol === false) {
-      generatePassword();
+    var symbol = confirm ("Would you like to include special characters? Choose 'Ok' for yes or 'Cancel' for no.")
+    if (symbol) {
+      enabledOptions.push("symbol");
     }
+
 
     // error if no character types chosen
-    if (lowercase == false && uppercase == false && number == false && special == false) {
-    var confirmError = confirm ("Error: You must choose to include at least one character type.") }
-  
-    // if user chooses, cancel, back to the beginning
-    if (confirmError === false) {
-      generatePassword;
+    if (!enabledOptions.length) {
+      var confirmError = confirm ("Error: You must choose to include at least one character type.") 
     }
+    
+    if (confirmError){
+      generatePassword (); 
+    }
+      
+  // initialized blank password to add to it
+  var thePassword = "";
+  // will start at the first enabled option
+  var optionTypeToUsePosition = 0;
 
-    else {
-      //enter in function for generating the actual pw
+  // looping the password as long as the user chose
+  for (let i = 0; i < passwordLength; i++) {
+    // get the name of the option type from the enabled options
+    var optionTypeToUse = enabledOptions[optionTypeToUsePosition];
+
+    // getting random character from the options for the option type that we're working with
+    var theCharacter = getRandomOptionTypeCharacter(optionTypeToUse);
+
+    //adds theCharacter to the end of thePassword
+    thePassword += theCharacter;
+
+    // resets optionTypeToUsePosition back to first enabled option to choose from options again otherwise go to next enabled option
+    if (optionTypeToUsePosition === enabledOptions.length-1) {
+      optionTypeToUsePosition = 0;
+    } else {
+      optionTypeToUsePosition++;
     }
-  
+  }
+
+  return thePassword;
+
+}
+
+function getRandomOptionTypeCharacter(optionTypeToUse) {
+  // gets the amount of characters available for this option type
+  var optionTypeTotal = options[optionTypeToUse].length;
+  var randomCharacterPosition = Math.floor(Math.random() * optionTypeTotal);
+
+  // pluck theCharacter from the optionType at the random generated position from above
+  var theCharacter = options[optionTypeToUse][randomCharacterPosition];
+
+  return theCharacter;
 }
 
 
