@@ -26,7 +26,7 @@ function generatePassword() {
 
     // Empty array for enabled options that user chooses
     var enabledOptions = []
-    // Empty string that random characters will be added in to
+    // Empty string that random characters will be added in
     var passwordString = ""
      
     // or user cancels
